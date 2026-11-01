@@ -2,10 +2,137 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://itunes.apple.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://upload.wikimedia.org https://i.ytimg.com https://*.mzstatic.com; media-src 'self' https:; frame-src https://www.youtube-nocookie.com; connect-src 'self' https://en.wikipedia.org https://he.wikipedia.org https://commons.wikimedia.org https://itunes.apple.com; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="robots" content="noindex, nofollow">
 <title>סקרן · דוגמה</title>
-<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#F5F5F1;color:#121212;font:18px/1.6 system-ui,sans-serif;padding:24px;text-align:center}</style>
+<meta name="description" content="קורס אישי וקצר על כל נושא שתבחרו, בלי פרסומות ובלי הסחות דעת. 5, 10, 15 או 30 דקות.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#FFFFFF">
+<meta property="og:title" content="סקרן">
+<meta property="og:description" content="מה תרצו ללמוד היום? קורס אישי וקצר על כל נושא, בלי הסחות דעת.">
+<meta property="og:locale" content="he_IL">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23FFE63B'/%3E%3Ccircle cx='14' cy='14' r='7' fill='none' stroke='%23121212' stroke-width='3'/%3E%3Cpath d='M19.5 19.5l6 6' stroke='%23121212' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- one link per family, so a problem with one font never blocks the others -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karantina:wght@300;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bona+Nova:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400;700&display=swap">
+<link rel="stylesheet" href="app.css">
+<style>
+.pv-ribbon { margin: 0; padding-block: 9px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: var(--ink); color: var(--wash); font: 400 13.5px/1.5 var(--f-ui); text-align: center; text-wrap: balance; }
+.pv-ribbon b { color: var(--hl); font-weight: 700; }
+</style>
+<!-- the preview answers the page's server requests inside the browser; it must run before app.js -->
+<script src="preview.js"></script>
+<script src="app.js" defer></script>
 </head>
-<body><p>הדוגמה של סקרן בהכנה. נסו שוב בעוד כמה דקות.</p></body>
+<body>
+<p class="pv-ribbon"><b>דוגמה:</b> קורס מוכן על חורים שחורים, עם סרטונים, תמונות, שירים ופודקאסטים אמיתיים. באתר המלא, Claude כותב קורס כזה על כל נושא.</p>
+<noscript><p class="noscript">כדי להשתמש בסקרן צריך להפעיל JavaScript בדפדפן.</p></noscript>
+<div id="app">
+
+  <div id="home">
+    <header class="wrap top">
+      <span class="logo">סקרן</span>
+      <span class="promise">בלי פרסומות. בלי התראות. רק אתם והנושא.</span>
+    </header>
+
+    <main class="wrap home">
+      <h1 class="q" id="q">מה תרצו ללמוד היום?</h1>
+      <form id="askForm" class="ask" novalidate>
+        <div class="topic-wrap">
+          <label class="sr" for="topic">נושא ללמידה</label>
+          <input id="topic" name="topic" type="text" maxlength="120" autocomplete="off" enterkeyhint="go" placeholder="כל נושא שבעולם">
+        </div>
+        <p class="examples"><span>למשל:</span>
+          <button type="button" data-topic="איך עובדת בינה מלאכותית">איך עובדת בינה מלאכותית</button>
+          <button type="button" data-topic="ההיסטוריה של הפיצה">ההיסטוריה של הפיצה</button>
+          <button type="button" data-topic="למה חתולים מגרגרים">למה חתולים מגרגרים</button>
+        </p>
+
+        <div class="frows">
+          <fieldset class="frow">
+            <legend class="sr">כמה דקות יש לכם?</legend>
+            <span class="frow-label" aria-hidden="true">כמה דקות?</span>
+            <div class="ruler" id="ruler">
+              <div class="r-track" id="rTrack"></div>
+              <span class="r-zero" aria-hidden="true">0</span>
+              <label class="stop-l" style="--p: 16.667%"><input type="radio" name="min" value="5" id="m5"><span>5</span></label>
+              <label class="stop-l" style="--p: 33.333%"><input type="radio" name="min" value="10" id="m10" checked><span>10</span></label>
+              <label class="stop-l" style="--p: 50%"><input type="radio" name="min" value="15" id="m15"><span>15</span></label>
+              <label class="stop-l" style="--p: 100%"><input type="radio" name="min" value="30" id="m30"><span>30</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="frow">
+            <legend class="sr">למי הקורס?</legend>
+            <span class="frow-label" aria-hidden="true">למי?</span>
+            <div class="levels">
+              <label class="lv"><input type="radio" name="lvl" value="all" id="lv-all" checked><span>לכולם</span></label>
+              <label class="lv"><input type="radio" name="lvl" value="kids" id="lv-kids"><span>ילדים</span></label>
+              <label class="lv"><input type="radio" name="lvl" value="beginner" id="lv-beg"><span>מתחילים</span></label>
+              <label class="lv"><input type="radio" name="lvl" value="advanced" id="lv-adv"><span>מתקדמים</span></label>
+            </div>
+          </fieldset>
+          <div class="frow" id="codeRow" hidden>
+            <label class="frow-label" for="accessCode">קוד גישה</label>
+            <input id="accessCode" class="code-in" type="text" maxlength="80" autocomplete="off" autocapitalize="off" spellcheck="false" dir="ltr" placeholder="הקוד שקיבלתם">
+          </div>
+        </div>
+
+        <div class="cta-row">
+          <button class="cta" type="submit" id="ctaBtn">
+            <span id="ctaLabel">בנו לי קורס</span>
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          </button>
+          <button type="button" class="txtbtn" data-act="sample">או קורס מוכן על חורים שחורים</button>
+          <button type="button" class="txtbtn" id="resumeBtn" data-act="resume" hidden></button>
+          <p class="form-msg" id="formMsg" role="alert" hidden></p>
+        </div>
+      </form>
+    </main>
+
+    <footer class="wrap foot">
+      <p>כל קורס נבנה סביב <b>הפיד</b>, העיקר שצריך לדעת על הנושא. מסביבו איורים ותמונות, סרטונים, פודקאסט, חידה, בדיחה, שיר ומבחן קצר, בכמות שמתאימה לזמן שבחרתם. בלי פרסומות ובלי התראות.</p>
+      <p class="fine">הנושא שתכתבו נשלח ל-Claude כדי לכתוב את הקורס, ולשירותי חיפוש (YouTube, ויקישיתוף ו-Apple) כדי למצוא סרטונים, תמונות, שירים ופודקאסטים. ההערות שלכם נשמרות רק בדפדפן הזה.</p>
+    </footer>
+  </div>
+
+  <div id="course" hidden>
+    <header class="topbar">
+      <div class="wrap bar">
+        <button class="logo" type="button" data-act="home" aria-label="סקרן, חזרה לדף הבית">סקרן</button>
+        <div class="tl" aria-hidden="true">
+          <div class="tl-segs" id="tlSegs"></div>
+          <div class="tl-track"><span class="tl-fill" id="tlFill"></span><span class="tl-now" id="tlNow"></span></div>
+        </div>
+        <div class="clock" role="timer" aria-label="הזמן שנשאר">
+          <span class="t-read" id="tRead">10:00</span>
+          <button class="sq" type="button" id="tToggle" data-act="ttoggle" aria-label="השהיית הטיימר"></button>
+        </div>
+        <button class="txtbtn" type="button" data-act="home">קורס חדש</button>
+      </div>
+    </header>
+
+    <main class="wrap course">
+      <section class="head">
+        <p class="eyebrow" id="eyebrow"></p>
+        <h1 class="title"><span id="cTitle"></span></h1>
+        <p class="hook" id="cHook" hidden></p>
+        <div class="status" id="status" role="status" aria-live="polite" hidden></div>
+      </section>
+      <div class="banner" id="doneBanner" role="status" hidden></div>
+      <div class="grid" id="grid"><div class="col" id="col-a"></div><div class="col" id="col-main"></div><div class="col" id="col-b"></div></div>
+      <footer class="course-foot">
+        <p class="ai-note" id="aiNote">הקורס נכתב בעזרת בינה מלאכותית (Claude) ועלול לכלול טעויות. כדאי לבדוק פרטים חשובים במקורות.</p>
+        <p class="ai-note">סרטונים: YouTube · תמונות: ויקישיתוף, עם שם הצלם והרישיון · שירים ופודקאסטים: Apple</p>
+      </footer>
+    </main>
+  </div>
+
+  <dialog id="vdlg" class="vdlg" aria-labelledby="vdlgT"></dialog>
+</div>
+</body>
 </html>
