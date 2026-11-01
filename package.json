@@ -1,0 +1,17 @@
+{
+  "name": "sakran",
+  "version": "0.1.0",
+  "private": true,
+  "description": "סקרן: קורס אישי וקצר על כל נושא, עם הפיד במרכז, סרטונים, תמונות, פודקאסט, שיר ומבחן עצמי.",
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "dev": "node dev/server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0"
+  }
+}
