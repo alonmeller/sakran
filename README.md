@@ -33,7 +33,7 @@
 | משתנה | חובה? | מה זה |
 | --- | --- | --- |
 | `ANTHROPIC_API_KEY` | כן | מפתח ל-Claude. יוצרים ב-[Claude Console](https://platform.claude.com), תחת Settings → API keys. |
-| `CLAUDE_MODEL` | כן | מזהה המודל של Claude שבו האפליקציה תשתמש. הרשימה ב[עמוד המודלים](https://platform.claude.com/docs/en/about-claude/models/overview). |
+| `CLAUDE_MODEL` | לא | ברירת המחדל היא `claude-opus-5-5`, המודל החזק והעדכני של Claude. אפשר להחליף למזהה אחר מ[עמוד המודלים](https://platform.claude.com/docs/en/about-claude/models/overview), למשל `claude-sonnet-5-5` הזול יותר. |
 | `YOUTUBE_API_KEY` | מומלץ | בלעדיו מוצגים קישורי חיפוש במקום סרטונים. ראו למטה. |
 | `ACCESS_CODE` | לא | אם מגדירים, רק מי שיודע את הקוד יכול לבנות קורסים חדשים. טוב לתקופת הרצה סגורה. הקורס המוכן פתוח לכולם. |
 | `RATE_LIMIT_PER_10_MIN` | לא | כמה בקשות מותר לכל גולש ב-10 דקות. כל קורס הוא 3 בקשות. ברירת המחדל 30. |
