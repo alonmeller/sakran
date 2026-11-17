@@ -130,13 +130,7 @@ test('CLAUDE_FALLBACKS=off leaves the fallback out', async () => {
 });
 
 test('checks before calling Claude', async () => {
-  delete process.env.CLAUDE_MODEL;
-  let res = await ask({});
-  assert.equal(res.status, 503);
-  assert.deepEqual(await res.json(), { error: 'not_configured' });
-  process.env.CLAUDE_MODEL = 'test-model';
-
-  res = await ask({ minutes: 11 });
+  let res = await ask({ minutes: 11 });
   assert.equal(res.status, 400);
 
   process.env.ACCESS_CODE = 'קוד';
@@ -189,4 +183,12 @@ test('status says what is set up, never the keys', async () => {
   delete process.env.ANTHROPIC_API_KEY;
   s = await (await GET(new Request('http://localhost/api/status'))).json();
   assert.equal(s.ai, false);
+});
+
+test('uses the latest Claude model unless CLAUDE_MODEL says otherwise', async () => {
+  delete process.env.CLAUDE_MODEL;
+  const start = mock.calls.length;
+  await (await ask({})).text();
+  assert.equal(mock.calls[start].body.model, 'claude-opus-5-5');
+  process.env.CLAUDE_MODEL = 'test-model';
 });
